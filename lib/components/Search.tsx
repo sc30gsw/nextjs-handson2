@@ -29,21 +29,31 @@ const Search: FunctionComponent<{ randomPhotos: Photo[] }> = ({
   const [loading, startTransition] = useTransition()
 
   const handleClick = async () => {
-    setSearching(true)
+    try {
+      setSearching(true)
 
-    const response = await fetch('http://localhost:3000/api/search', {
-      method: 'POST',
-      body: JSON.stringify({ query }),
-      headers: { 'Content-Type': 'application/json' },
-    })
+      const response = await fetch('http://localhost:3000/api/search', {
+        method: 'POST',
+        body: JSON.stringify({ query }),
+        headers: { 'Content-Type': 'application/json' },
+      })
 
-    const json: PhotoSearchResponse = await response.json()
+      if (!response.ok) throw response
 
-    startTransition(() => {
-      setSearchPhotos(json.results)
-    })
-    setSearching(false)
+      const json: PhotoSearchResponse = await response.json()
+
+      startTransition(() => {
+        setSearchPhotos(json.results)
+      })
+    } catch (error) {
+      console.error(error)
+      alert('検索中にエラーが発生しました')
+      setSearchPhotos([])
+    } finally {
+      setSearching(false)
+    }
   }
+
   return (
     <div>
       <div className="my-8 flex justify-center">
