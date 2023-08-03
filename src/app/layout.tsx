@@ -1,5 +1,6 @@
 import './globals.css'
 
+import Loading from 'lib/components/Loading'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Suspense } from 'react'
@@ -25,7 +26,7 @@ export default function RootLayout({
           </div>
         </header>
         <main className="pt-20 pb-8 bg-gray-950 min-h-screen">
-          <Suspense fallback={'loading...'}>{children}</Suspense>
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
       </body>
     </html>
